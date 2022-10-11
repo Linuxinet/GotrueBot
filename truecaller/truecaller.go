@@ -5,9 +5,10 @@ import (
 	"io"
 	"log"
 	"net/http"
-)
+	"os"
 
-const TOKEN = "Bearer a2i07--aK29_z-v-MGjMpctUve_wfqc4-zlWUk-M4ZMoAZd_MZLDIUouO6USj649"
+	"github.com/joho/godotenv"
+)
 
 type Response struct {
 	Data []struct {
@@ -31,7 +32,21 @@ type INTaddresses struct {
 	Email string `json:"id"`
 }
 
+func goDotEnvVariable(key string) string {
+
+	// load .env file
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
+}
+
 func Auth() {
+
+	TOKEN := goDotEnvVariable("TRUECALLER_TOKEN")
 
 	auth_url := "https://account-asia-south1.truecaller.com/v2.1/credentials/check?encoding=json"
 
@@ -58,6 +73,8 @@ func Auth() {
 }
 
 func Search_num(mobilenumber string) []byte {
+
+	TOKEN := goDotEnvVariable("TRUECALLER_TOKEN")
 
 	search_api := "https://search5-noneu.truecaller.com/v2/search?q=" + mobilenumber + "&countryCode=IN&type=4&locAddr=&placement=SEARCHRESULTS%2CHISTORY%2CDETAILS&encoding=json"
 

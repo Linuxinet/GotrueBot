@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"regexp"
 	"strings"
 	truecall "vinay/truecaller"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/joho/godotenv"
 	"github.com/nyaruka/phonenumbers"
 )
 
@@ -47,11 +49,24 @@ func (s *String) UnmarshalJSON(d []byte) error {
 	return nil
 }
 
+func goDotEnvVariable(key string) string {
+
+	// load .env file
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
+}
+
 func main() {
 
 	re := regexp.MustCompile(`^[0-9]{10}$`)
 
-	bot, err := tgbotapi.NewBotAPI("5736225201:AAH0Zci22bzX9Ob7EWhdfe42E4RBcZj1U6g")
+	token_bot := goDotEnvVariable("BOT_TOKEN")
+	bot, err := tgbotapi.NewBotAPI(token_bot)
 	if err != nil {
 		log.Println(err)
 	}
