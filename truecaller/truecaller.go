@@ -36,11 +36,9 @@ func goDotEnvVariable(key string) string {
 
 	// load .env file
 	err := godotenv.Load(".env")
-
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
-
 	return os.Getenv(key)
 }
 
@@ -49,9 +47,7 @@ func Auth() {
 	TOKEN := goDotEnvVariable("TRUECALLER_TOKEN")
 
 	auth_url := "https://account-asia-south1.truecaller.com/v2.1/credentials/check?encoding=json"
-
 	data := []byte(`{"reason": "restored_from_account_manager"}`)
-
 	r, err := http.NewRequest("POST", auth_url, bytes.NewBuffer(data))
 	if err != nil {
 		log.Panic(err)
@@ -75,7 +71,6 @@ func Auth() {
 func Search_num(mobilenumber string) []byte {
 
 	TOKEN := goDotEnvVariable("TRUECALLER_TOKEN")
-
 	search_api := "https://search5-noneu.truecaller.com/v2/search?q=" + mobilenumber + "&countryCode=IN&type=4&locAddr=&placement=SEARCHRESULTS%2CHISTORY%2CDETAILS&encoding=json"
 
 	s, err := http.NewRequest("GET", search_api, nil)
